@@ -8,6 +8,17 @@
 const SONGS_CONFIG = [
 
   {
+    movie: "Dude",
+    songs: [
+      "Boom Boom.mpeg",
+      "Kannukulla.mpeg",
+      "Nallaru Po.mpeg",
+      "Oorum Blood.mpeg",
+      "Singari.mpeg",
+    ]
+  },
+
+  {
     movie: "Goat",
     songs: [
       "Chinna Chinna Kangal.mpeg",
@@ -44,6 +55,15 @@ const SONGS_CONFIG = [
       "Polakattum.mpeg",
       "Vaathi Comming.mpeg",
       "Vaathi Raid.mpeg",
+    ]
+  },
+
+  {
+    movie: "Meesaya Murukku 2",
+    songs: [
+      "Aura 10_10.mpeg",
+      "Goindhamma.mpeg",
+      "Pappali Pazhamey.mpeg",
     ]
   },
 
