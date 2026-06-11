@@ -1,9 +1,9 @@
 @echo off
-title SoundWave — Local Server
+title Isai Mayam — Local Server
 color 0A
 echo.
 echo  ============================================
-echo   SoundWave Music Player — by Harish Kumar
+echo   Isai Mayam Music Player — by Harish Kumar
 echo  ============================================
 echo.
 echo  Starting local server...
