@@ -1,9 +1,9 @@
 @echo off
-title SoundWave — Update Config
+title Isai Mayam — Update Config
 color 0A
 echo.
 echo  ============================================
-echo   SoundWave — Auto Config Generator
+echo   Isai Mayam — Auto Config Generator
 echo   by Harish Kumar
 echo  ============================================
 echo.
