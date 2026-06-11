@@ -92,7 +92,7 @@ if __name__ == '__main__':
     os.chdir(os.path.dirname(os.path.abspath(__file__)))
     
     # Run a initial scan on startup
-    print("SoundWave Local Server — Initializing...")
+    print("Isai Mayam Local Server — Initializing...")
     try:
         config = scan_songs()
         if config:
@@ -110,7 +110,7 @@ if __name__ == '__main__':
     socketserver.TCPServer.allow_reuse_address = True
     
     with socketserver.TCPServer(("", PORT), handler) as httpd:
-        print(f"\nSoundWave Local Server started on http://localhost:{PORT}")
+        print(f"\nIsai Mayam Local Server started on http://localhost:{PORT}")
         print("Press Ctrl+C to stop the server.")
         
         # Open browser automatically
