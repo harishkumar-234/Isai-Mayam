@@ -58,7 +58,7 @@ def write_config(config):
     lines = []
     lines.append('/**')
     lines.append(' * ============================================================')
-    lines.append(' *  SoundWave — Songs Configuration (Auto-Generated)')
+    lines.append(' *  Isai Mayam — Songs Configuration (Auto-Generated)')
     lines.append(' *  Run UPDATE_CONFIG.bat to regenerate this file.')
     lines.append(' * ============================================================')
     lines.append(' */')
@@ -86,7 +86,7 @@ def write_config(config):
     print(f'\n[OK] songs-config.js updated with {len(config)} category/folder entry(ies).')
 
 if __name__ == '__main__':
-    print('SoundWave — Auto Config Generator')
+    print('Isai Mayam — Auto Config Generator')
     print('=' * 40)
     config = scan_songs()
     if config:
