@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   SoundWave Music Player — script.js
+   Isai Mayam Music Player — script.js
    Created by Harish Kumar
    ═══════════════════════════════════════════════════════════════ */
 
@@ -21,9 +21,9 @@ let isPlaying = false;
 let isShuffle = false;
 let repeatMode = 0;        // 0 = off, 1 = repeat all, 2 = repeat one
 // Load liked songs from localStorage on startup (store by file src path)
-const savedLikes = localStorage.getItem('soundwave_liked_songs');
+const savedLikes = localStorage.getItem('Isai Mayam_liked_songs');
 let likedSongs = new Set(savedLikes ? JSON.parse(savedLikes) : []);
-const savedPlaylists = localStorage.getItem('soundwave_playlists');
+const savedPlaylists = localStorage.getItem('Isai Mayam_playlists');
 let playlists = savedPlaylists ? JSON.parse(savedPlaylists) : [];
 let selectedPlaylist = null;
 let currentSongIdForModal = null;
@@ -376,7 +376,7 @@ window.toggleLike = function (songId) {
   }
 
   // Persist to localStorage
-  localStorage.setItem('soundwave_liked_songs', JSON.stringify(Array.from(likedSongs)));
+  localStorage.setItem('Isai Mayam_liked_songs', JSON.stringify(Array.from(likedSongs)));
 
   // Update player bar heart if this is the current song
   if (media[currentIndex] && media[currentIndex].id === songId) {
@@ -1160,7 +1160,7 @@ window.createNewPlaylistFromModal = function () {
     songs: [song.src]
   });
 
-  localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
+  localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
   closePlaylistModal();
   buildPlaylist();
 };
@@ -1169,7 +1169,7 @@ window.addSongToPlaylist = function (playlistName, songSrc) {
   const pl = playlists.find(p => p.name === playlistName);
   if (pl && !pl.songs.includes(songSrc)) {
     pl.songs.push(songSrc);
-    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
+    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
   }
   closePlaylistModal();
   buildPlaylist();
@@ -1180,7 +1180,7 @@ window.removeSongFromPlaylist = function (songSrc) {
   const pl = playlists.find(p => p.name === selectedPlaylist);
   if (pl) {
     pl.songs = pl.songs.filter(src => src !== songSrc);
-    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
+    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
     buildPlaylist();
   }
 };
@@ -1188,7 +1188,7 @@ window.removeSongFromPlaylist = function (songSrc) {
 window.deletePlaylist = function (index) {
   if (confirm(`Are you sure you want to delete "${playlists[index].name}"?`)) {
     playlists.splice(index, 1);
-    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
+    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
     buildPlaylist();
   }
 };
@@ -1208,7 +1208,7 @@ window.promptCreatePlaylist = function () {
     songs: []
   });
 
-  localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
+  localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
   buildPlaylist();
 };
 
