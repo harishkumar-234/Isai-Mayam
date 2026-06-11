@@ -924,7 +924,14 @@ function loadFromConfigData(configData) {
 
     for (const filename of (entry.songs || [])) {
       const songTitle = cleanName(filename);
-      const src = movieName ? 'songs/' + movieName + '/' + filename : 'songs/' + filename;
+      
+      // Use custom URL (e.g. Blob URL for direct import) if available, otherwise build relative path
+      let src = '';
+      if (entry.songUrls && entry.songUrls[filename]) {
+        src = entry.songUrls[filename];
+      } else {
+        src = movieName ? 'songs/' + movieName + '/' + filename : 'songs/' + filename;
+      }
 
       items.push({
         id: idCounter,
@@ -946,6 +953,114 @@ function loadFromConfigData(configData) {
     media.length = 0;
     media.push(...items);
   }
+}
+
+// Toast notification utility
+function showToast(message) {
+  let toast = document.getElementById('toastNotification');
+  if (!toast) {
+    toast = document.createElement('div');
+    toast.id = 'toastNotification';
+    toast.className = 'toast-msg';
+    document.body.appendChild(toast);
+  }
+  toast.innerHTML = `<span class="toast-icon">✨</span> <span>${message}</span>`;
+  toast.classList.add('show');
+  setTimeout(() => {
+    toast.classList.remove('show');
+  }, 3500);
+}
+
+// Folder Import Handler
+function handleFolderImport(files) {
+  const rootSongs = [];
+  const folderMap = {};
+
+  for (const file of files) {
+    const relativePath = file.webkitRelativePath || file.name;
+    const parts = relativePath.split('/');
+    
+    if (!isAudioFile(file.name)) continue;
+
+    let movieName = '';
+    let fileName = file.name;
+
+    // Try to find the "songs" folder segment to determine movie folder
+    const songsIndex = parts.indexOf('songs');
+    if (songsIndex !== -1) {
+      if (parts.length > songsIndex + 2) {
+        movieName = parts[songsIndex + 1];
+        fileName = parts[songsIndex + 2];
+      } else if (parts.length === songsIndex + 2) {
+        movieName = '';
+        fileName = parts[songsIndex + 1];
+      }
+    } else {
+      // If selected parent folder of movies directly
+      if (parts.length > 1) {
+        movieName = parts[parts.length - 2];
+        fileName = parts[parts.length - 1];
+      }
+    }
+
+    const objectURL = URL.createObjectURL(file);
+
+    if (movieName) {
+      if (!folderMap[movieName]) {
+        folderMap[movieName] = [];
+      }
+      folderMap[movieName].push({ filename: fileName, src: objectURL });
+    } else {
+      rootSongs.push({ filename: fileName, src: objectURL });
+    }
+  }
+
+  const configData = [];
+  if (rootSongs.length > 0) {
+    const urls = {};
+    rootSongs.forEach(s => { urls[s.filename] = s.src; });
+    configData.push({
+      movie: '',
+      songs: rootSongs.map(s => s.filename),
+      songUrls: urls
+    });
+  }
+
+  for (const movieName of Object.keys(folderMap).sort()) {
+    const songs = folderMap[movieName];
+    const urls = {};
+    songs.forEach(s => { urls[s.filename] = s.src; });
+    configData.push({
+      movie: movieName,
+      songs: songs.map(s => s.filename),
+      songUrls: urls
+    });
+  }
+
+  if (configData.length === 0) {
+    alert('No supported audio files found in the selected folder. Supported extensions: ' + AUDIO_EXTENSIONS.join(', '));
+    return;
+  }
+
+  // Load from configuration
+  loadFromConfigData(configData);
+
+  // Update counts
+  const songCountEl = document.getElementById('songCount');
+  const movieCountEl = document.getElementById('movieCount');
+  if (songCountEl) songCountEl.textContent = media.length;
+  if (movieCountEl) {
+    const uniqueMovies = new Set(
+      media.filter(m => m.type === 'movie').map(m => m.artist)
+    );
+    movieCountEl.textContent = uniqueMovies.size;
+  }
+
+  // Reload UI with imported songs
+  buildPlaylist();
+  if (media.length > 0) loadSong(0);
+
+  showToast(`Successfully imported ${media.length} songs from folder!`);
 }
 
 async function init() {
@@ -976,6 +1091,22 @@ async function init() {
 }
 
 init();
+
+// Setup event listeners for local folder import
+const importBtn = document.getElementById('importFolderBtn');
+const folderPicker = document.getElementById('folderPicker');
+
+if (importBtn && folderPicker) {
+  importBtn.addEventListener('click', () => {
+    folderPicker.click();
+  });
+
+  folderPicker.addEventListener('change', (e) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleFolderImport(e.target.files);
+    }
+  });
+}
 
 /* ────────────────────────────────────────────────────────────────
    CUSTOM PLAYLISTS SYSTEM
