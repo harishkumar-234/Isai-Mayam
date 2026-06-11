@@ -2,7 +2,7 @@
 
 echo ""
 echo " ============================================"
-echo "  SoundWave Music Player — by Harish Kumar"
+echo "  Isai Mayam Music Player — by Harish Kumar"
 echo " ============================================"
 echo ""
 echo "  Starting local server..."
