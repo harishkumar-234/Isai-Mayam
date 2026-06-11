@@ -74,6 +74,13 @@ const SONGS_CONFIG = [
       "Vaa Vaa En Thalaiva.mpeg",
       "Vaadi Vaadi.mpeg",
     ]
+  },
+
+  {
+    movie: "The Paradise",
+    songs: [
+      "Aaya Sher.mpeg",
+    ]
   }
 
 ];
