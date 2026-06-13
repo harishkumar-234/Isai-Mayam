@@ -9,215 +9,203 @@
 </head>
 
 <body>
-  <!-- Hidden input kept for script.js compatibility — mainSearch drives filtering -->
-  <input type="hidden" id="sidebarSearch">
+<!-- Hidden input kept for script.js compatibility — mainSearch drives filtering -->
+<input type="hidden" id="sidebarSearch">
 
-  <div class="app">
+<div class="app">
 
-    <!-- ═══════════════════════════════════════
-       MAIN CONTENT
-  ════════════════════════════════════════ -->
-    <main class="main">
-      <!-- ── TOPBAR ── -->
-      <div class="topbar">
-        <div class="topbar-row1">
-          <div class="topbar-brand">
-            <div class="topbar-brand-main">
-              <img src="img/Logo.png" alt="Iasai Mayam Logo" class="topbar-logo">
-              <div class="topbar-title">Iasai <span>Mayam</span></div>
-            </div>
-            <div class="topbar-slogan">Where Emotions Meet Music</div>
+  <!-- ═══════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════ -->
+  <main class="main">
+    <!-- ── TOPBAR ── -->
+    <div class="topbar">
+      <div class="topbar-row1">
+        <div class="topbar-brand">
+          <div class="topbar-brand-main">
+            <img src="img/Logo.png" alt="Iasai Mayam Logo" class="topbar-logo">
+            <div class="topbar-title">Iasai <span>Mayam</span></div>
           </div>
+          <div class="topbar-slogan">Where Emotions Meet Music</div>
+        </div>
 
-          <!-- Big Search Bar -->
-          <div class="search-bar-wrap" id="searchBarWrap">
-            <svg class="search-icon-left" viewBox="0 0 24 24" stroke-width="2">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+        <!-- Big Search Bar -->
+        <div class="search-bar-wrap" id="searchBarWrap">
+          <svg class="search-icon-left" viewBox="0 0 24 24" stroke-width="2">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+          <input class="search-input" id="mainSearch" type="text" placeholder="Search songs, movies, artists, genres…"
+                 autocomplete="off">
+          <button class="search-clear" id="searchClear" aria-label="Clear search">
+            <svg viewBox="0 0 24 24" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
-            <input class="search-input" id="mainSearch" type="text" placeholder="Search songs, movies, artists, genres…"
-              autocomplete="off">
-            <button class="search-clear" id="searchClear" aria-label="Clear search">
-              <svg viewBox="0 0 24 24" stroke-width="2">
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
-              </svg>
-            </button>
+          </button>
 
-            <!-- Search Dropdown -->
-            <div class="search-dropdown" id="searchDropdown">
-              <div class="dropdown-tabs">
-                <button class="dropdown-tab active" data-tab="all">All</button>
-                <button class="dropdown-tab" data-tab="songs">🎵 Songs</button>
-                <button class="dropdown-tab" data-tab="movies">🎬 Movies</button>
-              </div>
-              <div class="dropdown-results" id="dropdownResults"></div>
+          <!-- Search Dropdown -->
+          <div class="search-dropdown" id="searchDropdown">
+            <div class="dropdown-tabs">
+              <button class="dropdown-tab active" data-tab="all">All</button>
+              <button class="dropdown-tab" data-tab="songs">🎵 Songs</button>
+              <button class="dropdown-tab" data-tab="movies">🎬 Movies</button>
             </div>
-          </div>
-
-          <div class="stats-row">
-            <button class="import-btn" id="importFolderBtn" title="Directly load your songs folder in the browser">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="width: 14px; height: 14px;">
-                <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path>
-              </svg>
-              Import 'songs' Folder
-            </button>
-            <input type="file" id="folderPicker" webkitdirectory directory multiple style="display: none;">
-            <div class="stat-pill"><strong id="songCount">0</strong> Songs</div>
-            <div class="stat-pill"><strong id="movieCount">0</strong> Movies</div>
-          </div>
-        </div>
-
-        <div class="topbar-row2">
-          <div class="filter-tabs" id="filterTabs">
-            <button class="filter-tab active" data-filter="all">All</button>
-            <button class="filter-tab" data-filter="songs">Songs</button>
-            <button class="filter-tab" data-filter="movies">Movies</button>
-            <button class="filter-tab" data-filter="playlists">Playlists</button>
-            <button class="filter-tab" data-filter="liked">❤ Liked</button>
+            <div class="dropdown-results" id="dropdownResults"></div>
           </div>
         </div>
       </div>
 
-      <!-- ── NOW PLAYING HERO (compact strip) ── -->
-      <div class="now-playing-hero">
-        <div class="hero-inner">
-          <div class="album-art color-1" id="heroArt">
-            <div class="album-art-inner" id="heroEmoji">🎵</div>
-            <div class="album-art-center"></div>
-          </div>
-          <div class="hero-info">
-            <div class="now-label" id="nowLabel">▶ Now Playing</div>
-            <div class="now-title" id="heroTitle">Select a Track</div>
-            <div class="now-artist" id="heroArtist">—</div>
-            <div class="now-album" id="heroAlbum">—</div>
-            <div class="tags" id="heroTags"></div>
-            <div class="visualizer-container">
-              <canvas id="visualizer"></canvas>
-            </div>
+      <div class="topbar-row2">
+        <div class="filter-tabs" id="filterTabs">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="songs">Songs</button>
+          <button class="filter-tab" data-filter="movies">Movies</button>
+          <button class="filter-tab" data-filter="playlists">Playlists</button>
+          <button class="filter-tab" data-filter="liked">❤ Liked</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── NOW PLAYING HERO (compact strip) ── -->
+    <div class="now-playing-hero">
+      <div class="hero-inner">
+        <div class="album-art color-1" id="heroArt">
+          <div class="album-art-inner" id="heroEmoji">🎵</div>
+          <div class="album-art-center"></div>
+        </div>
+        <div class="hero-info">
+          <div class="now-label" id="nowLabel">▶ Now Playing</div>
+          <div class="now-title" id="heroTitle">Select a Track</div>
+          <div class="now-artist" id="heroArtist">—</div>
+          <div class="now-album" id="heroAlbum">—</div>
+          <div class="tags" id="heroTags"></div>
+          <div class="visualizer-container">
+            <canvas id="visualizer"></canvas>
           </div>
         </div>
       </div>
+    </div>
 
-      <!-- ── SONG LIST (was sidebar) ── -->
-      <div class="main-list-area">
-        <div class="sidebar-section-title" id="sidebarLabel">All Media</div>
-        <div class="playlist-container" id="playlistContainer"></div>
+    <!-- ── SONG LIST (was sidebar) ── -->
+    <div class="main-list-area">
+      <div class="sidebar-section-title" id="sidebarLabel">All Media</div>
+      <div class="playlist-container" id="playlistContainer"></div>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════
+     PLAYER BAR
+════════════════════════════════════════ -->
+  <footer class="player-bar">
+
+    <!-- Left: current track info -->
+    <div class="player-song-info">
+      <div class="mini-thumb color-1" id="miniThumb">
+        <span id="miniEmoji" style="font-size:22px">🎵</span>
       </div>
-    </main>
+      <div style="min-width:0">
+        <div class="player-title" id="playerTitle">No track selected</div>
+        <div class="player-artist" id="playerArtist">—</div>
+      </div>
+      <button class="heart-btn" id="heartBtn" aria-label="Like">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path class="heart-outline"
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+          <path class="heart-fill" fill="currentColor" stroke="none"
+                d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+        </svg>
+      </button>
+    </div>
 
-    <!-- ═══════════════════════════════════════
-       PLAYER BAR
-  ════════════════════════════════════════ -->
-    <footer class="player-bar">
-
-      <!-- Left: current track info -->
-      <div class="player-song-info">
-        <div class="mini-thumb color-1" id="miniThumb">
-          <span id="miniEmoji" style="font-size:22px">🎵</span>
-        </div>
-        <div style="min-width:0">
-          <div class="player-title" id="playerTitle">No track selected</div>
-          <div class="player-artist" id="playerArtist">—</div>
-        </div>
-        <button class="heart-btn" id="heartBtn" aria-label="Like">
+    <!-- Center: playback controls + progress -->
+    <div class="player-center">
+      <div class="controls-row">
+        <button class="ctrl-btn" id="shuffleBtn" title="Shuffle">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path class="heart-outline"
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
-            <path class="heart-fill" fill="currentColor" stroke="none"
-              d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" />
+            <polyline points="16 3 21 3 21 8" />
+            <line x1="4" y1="20" x2="21" y2="3" />
+            <polyline points="21 16 21 21 16 21" />
+            <line x1="15" y1="15" x2="21" y2="21" />
+          </svg>
+        </button>
+        <button class="ctrl-btn" id="prevBtn" aria-label="Previous">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="19 20 9 12 19 4 19 20" />
+            <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2" fill="none" />
+          </svg>
+        </button>
+        <button class="play-btn" id="playBtn" aria-label="Play / Pause">
+          <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 3 19 12 5 21 5 3" />
+          </svg>
+        </button>
+        <button class="ctrl-btn" id="nextBtn" aria-label="Next">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <polygon points="5 4 15 12 5 20 5 4" />
+            <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" fill="none" />
+          </svg>
+        </button>
+        <button class="ctrl-btn" id="repeatBtn" title="Repeat">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="17 1 21 5 17 9" />
+            <path d="M3 11V9a4 4 0 014-4h14" />
+            <polyline points="7 23 3 19 7 15" />
+            <path d="M21 13v2a4 4 0 01-4 4H3" />
           </svg>
         </button>
       </div>
 
-      <!-- Center: playback controls + progress -->
-      <div class="player-center">
-        <div class="controls-row">
-          <button class="ctrl-btn" id="shuffleBtn" title="Shuffle">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="16 3 21 3 21 8" />
-              <line x1="4" y1="20" x2="21" y2="3" />
-              <polyline points="21 16 21 21 16 21" />
-              <line x1="15" y1="15" x2="21" y2="21" />
-            </svg>
-          </button>
-          <button class="ctrl-btn" id="prevBtn" aria-label="Previous">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="19 20 9 12 19 4 19 20" />
-              <line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2" fill="none" />
-            </svg>
-          </button>
-          <button class="play-btn" id="playBtn" aria-label="Play / Pause">
-            <svg id="playIcon" viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="5 3 19 12 5 21 5 3" />
-            </svg>
-          </button>
-          <button class="ctrl-btn" id="nextBtn" aria-label="Next">
-            <svg viewBox="0 0 24 24" fill="currentColor">
-              <polygon points="5 4 15 12 5 20 5 4" />
-              <line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2" fill="none" />
-            </svg>
-          </button>
-          <button class="ctrl-btn" id="repeatBtn" title="Repeat">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="17 1 21 5 17 9" />
-              <path d="M3 11V9a4 4 0 014-4h14" />
-              <polyline points="7 23 3 19 7 15" />
-              <path d="M21 13v2a4 4 0 01-4 4H3" />
-            </svg>
-          </button>
+      <div class="progress-container">
+        <span class="time-label" id="currentTime">0:00</span>
+        <div class="progress-track" id="progressTrack">
+          <div class="progress-fill" id="progressFill" style="width:0%"></div>
         </div>
-
-        <div class="progress-container">
-          <span class="time-label" id="currentTime">0:00</span>
-          <div class="progress-track" id="progressTrack">
-            <div class="progress-fill" id="progressFill" style="width:0%"></div>
-          </div>
-          <span class="time-label" id="totalTime">0:00</span>
-        </div>
+        <span class="time-label" id="totalTime">0:00</span>
       </div>
-
-      <!-- Right: volume (removed as volume is system-controlled) -->
-      <div class="player-right"></div>
-    </footer>
-
-    <!-- ═══════════════════════════════════════
-       CREDIT FOOTER
-  ════════════════════════════════════════ -->
-    <div class="credit-bar">
-      <span class="credit-heart">♥</span>
-      <span>Created by</span>
-      <span class="credit-name">Harish Kumar</span>
-      <span class="credit-dot">·</span>
-      <span>Iasai Mayam Music Player</span>
-      <span class="credit-dot">·</span>
-      <span>All rights reserved &copy; 2026</span>
     </div>
 
-  </div><!-- /.app -->
+    <!-- Right: volume (removed as volume is system-controlled) -->
+    <div class="player-right"></div>
+  </footer>
 
-  <audio id="audioPlayer"></audio>
+  <!-- ═══════════════════════════════════════
+     CREDIT FOOTER
+════════════════════════════════════════ -->
+  <div class="credit-bar">
+    <span class="credit-heart">♥</span>
+    <span>Created by</span>
+    <span class="credit-name">Harish Kumar</span>
+    <span class="credit-dot">·</span>
+    <span>Iasai Mayam Music Player</span>
+    <span class="credit-dot">·</span>
+    <span>All rights reserved &copy; 2026</span>
+  </div>
 
-  <!-- Playlist Modal -->
-  <div class="modal-overlay" id="playlistModal">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3 class="modal-title">Add to Playlist</h3>
-        <button class="modal-close" onclick="closePlaylistModal()">&times;</button>
-      </div>
-      <div class="modal-body">
-        <div id="modalPlaylistsList"></div>
-        <div class="modal-divider">or</div>
-        <div class="create-playlist-form" onsubmit="event.preventDefault();">
-          <input type="text" id="newPlaylistInput" placeholder="Enter playlist name..." maxlength="30" />
-          <button class="modal-btn" onclick="createNewPlaylistFromModal()">Create & Add</button>
-        </div>
+</div><!-- /.app -->
+
+<audio id="audioPlayer"></audio>
+
+<!-- Playlist Modal -->
+<div class="modal-overlay" id="playlistModal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h3 class="modal-title">Add to Playlist</h3>
+      <button class="modal-close" onclick="closePlaylistModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div id="modalPlaylistsList"></div>
+      <div class="modal-divider">or</div>
+      <div class="create-playlist-form" onsubmit="event.preventDefault();">
+        <input type="text" id="newPlaylistInput" placeholder="Enter playlist name..." maxlength="30" />
+        <button class="modal-btn" onclick="createNewPlaylistFromModal()">Create & Add</button>
       </div>
     </div>
   </div>
+</div>
 
-  <script src="songs-config.js"></script>
-  <script src="script.js"></script>
+<script src="songs-config.js"></script>
+<script src="script.js"></script>
 </body>
 
 </html>
