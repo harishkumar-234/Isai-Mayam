@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════════════
-   Isai Mayam Music Player — script.js
+   SoundWave Music Player — script.js
    Created by Harish Kumar
    ═══════════════════════════════════════════════════════════════ */
 
@@ -21,9 +21,9 @@ let isPlaying = false;
 let isShuffle = false;
 let repeatMode = 0;        // 0 = off, 1 = repeat all, 2 = repeat one
 // Load liked songs from localStorage on startup (store by file src path)
-const savedLikes = localStorage.getItem('Isai Mayam_liked_songs');
+const savedLikes = localStorage.getItem('soundwave_liked_songs');
 let likedSongs = new Set(savedLikes ? JSON.parse(savedLikes) : []);
-const savedPlaylists = localStorage.getItem('Isai Mayam_playlists');
+const savedPlaylists = localStorage.getItem('soundwave_playlists');
 let playlists = savedPlaylists ? JSON.parse(savedPlaylists) : [];
 let selectedPlaylist = null;
 let currentSongIdForModal = null;
@@ -62,8 +62,10 @@ const sidebarSearch = document.getElementById('sidebarSearch');
 /* ────────────────────────────────────────────────────────────────
    INIT COUNTS
    ──────────────────────────────────────────────────────────────── */
-document.getElementById('songCount').textContent = '0';
-document.getElementById('movieCount').textContent = '0';
+const songCountEl = document.getElementById('songCount');
+const movieCountEl = document.getElementById('movieCount');
+if (songCountEl) songCountEl.textContent = '0';
+if (movieCountEl) movieCountEl.textContent = '0';
 
 /* ────────────────────────────────────────────────────────────────
    UTILITY HELPERS
@@ -376,7 +378,7 @@ window.toggleLike = function (songId) {
   }
 
   // Persist to localStorage
-  localStorage.setItem('Isai Mayam_liked_songs', JSON.stringify(Array.from(likedSongs)));
+  localStorage.setItem('soundwave_liked_songs', JSON.stringify(Array.from(likedSongs)));
 
   // Update player bar heart if this is the current song
   if (media[currentIndex] && media[currentIndex].id === songId) {
@@ -924,13 +926,22 @@ function loadFromConfigData(configData) {
 
     for (const filename of (entry.songs || [])) {
       const songTitle = cleanName(filename);
-      
+
       // Use custom URL (e.g. Blob URL for direct import) if available, otherwise build relative path
       let src = '';
       if (entry.songUrls && entry.songUrls[filename]) {
         src = entry.songUrls[filename];
       } else {
-        src = movieName ? 'songs/' + movieName + '/' + filename : 'songs/' + filename;
+        const repoBase =
+        entry.repo === 1
+        ? 'https://harishkumar-234.github.io/Isai-Mayam-Songs-1'
+        : entry.repo === 2
+        ? 'https://harishkumar-234.github.io/Isai-Mayam-Songs-2'
+        : 'https://harishkumar-234.github.io/Isai-Mayam-Songs';
+
+        src = movieName
+        ? `${repoBase}/${encodeURIComponent(movieName)}/${encodeURIComponent(filename)}`
+        : `${repoBase}/${encodeURIComponent(filename)}`;
       }
 
       items.push({
@@ -979,7 +990,7 @@ function handleFolderImport(files) {
   for (const file of files) {
     const relativePath = file.webkitRelativePath || file.name;
     const parts = relativePath.split('/');
-    
+
     if (!isAudioFile(file.name)) continue;
 
     let movieName = '';
@@ -1064,30 +1075,63 @@ function handleFolderImport(files) {
 }
 
 async function init() {
-  // Try to load dynamically from server first
-  let config = await scanSongsFromServer();
+  try {
+    const CONFIG_URLS = [
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs/songs-config.js',
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs-1/songs-config.js',
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs-2/songs-config.js'
+    ];
 
-  // Fall back to static config if dynamic scan is unavailable
-  if (!config && typeof SONGS_CONFIG !== 'undefined') {
-    config = SONGS_CONFIG;
+    let mergedConfig = [];
+
+    for (const url of CONFIG_URLS) {
+      try {
+        const response = await fetch(url + '?t=' + Date.now());
+
+        if (!response.ok) {
+          console.warn('Config not found:', url);
+          continue;
+        }
+
+        const jsText = await response.text();
+
+        let SONGS_CONFIG = [];
+
+        eval(jsText);
+
+        if (Array.isArray(SONGS_CONFIG)) {
+          mergedConfig.push(...SONGS_CONFIG);
+        }
+
+      } catch (err) {
+        console.warn('Failed loading config:', url, err);
+      }
+    }
+
+    loadFromConfigData(mergedConfig);
+
+    if (songCountEl) {
+      songCountEl.textContent = media.length;
+    }
+
+    if (movieCountEl) {
+      const uniqueMovies = new Set(
+        media.filter(m => m.type === 'movie').map(m => m.artist)
+      );
+      movieCountEl.textContent = uniqueMovies.size;
+    }
+
+    buildPlaylist();
+
+    if (media.length > 0) {
+      loadSong(0);
+    }
+
+    drawVisualizer();
+
+  } catch (err) {
+    console.error(err);
   }
-
-  loadFromConfigData(config);
-
-  // Update counts
-  const songCountEl = document.getElementById('songCount');
-  const movieCountEl = document.getElementById('movieCount');
-  if (songCountEl) songCountEl.textContent = media.length;
-  if (movieCountEl) {
-    const uniqueMovies = new Set(
-      media.filter(m => m.type === 'movie').map(m => m.artist)
-    );
-    movieCountEl.textContent = uniqueMovies.size;
-  }
-
-  buildPlaylist();
-  if (media.length > 0) loadSong(0);
-  drawVisualizer();
 }
 
 init();
@@ -1160,7 +1204,7 @@ window.createNewPlaylistFromModal = function () {
     songs: [song.src]
   });
 
-  localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
+  localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
   closePlaylistModal();
   buildPlaylist();
 };
@@ -1169,7 +1213,7 @@ window.addSongToPlaylist = function (playlistName, songSrc) {
   const pl = playlists.find(p => p.name === playlistName);
   if (pl && !pl.songs.includes(songSrc)) {
     pl.songs.push(songSrc);
-    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
+    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
   }
   closePlaylistModal();
   buildPlaylist();
@@ -1180,7 +1224,7 @@ window.removeSongFromPlaylist = function (songSrc) {
   const pl = playlists.find(p => p.name === selectedPlaylist);
   if (pl) {
     pl.songs = pl.songs.filter(src => src !== songSrc);
-    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
+    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
     buildPlaylist();
   }
 };
@@ -1188,7 +1232,7 @@ window.removeSongFromPlaylist = function (songSrc) {
 window.deletePlaylist = function (index) {
   if (confirm(`Are you sure you want to delete "${playlists[index].name}"?`)) {
     playlists.splice(index, 1);
-    localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
+    localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
     buildPlaylist();
   }
 };
@@ -1208,7 +1252,7 @@ window.promptCreatePlaylist = function () {
     songs: []
   });
 
-  localStorage.setItem('Isai Mayam_playlists', JSON.stringify(playlists));
+  localStorage.setItem('soundwave_playlists', JSON.stringify(playlists));
   buildPlaylist();
 };
 
