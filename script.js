@@ -1074,14 +1074,14 @@ function handleFolderImport(files) {
   showToast(`Successfully imported ${media.length} songs from folder!`);
 }
 
+const CONFIG_URLS = [
+  'https://harishkumar-234.github.io/Isai-Mayam-Songs/songs-config.js',
+  'https://harishkumar-234.github.io/Isai-Mayam-Songs-1/songs-config.js',
+  'https://harishkumar-234.github.io/Isai-Mayam-Songs-2/songs-config.js'
+];
+
 async function init() {
   try {
-    const CONFIG_URLS = [
-      'https://harishkumar-234.github.io/Isai-Mayam-Songs/songs-config.js',
-      'https://harishkumar-234.github.io/Isai-Mayam-Songs-1/songs-config.js',
-      'https://harishkumar-234.github.io/Isai-Mayam-Songs-2/songs-config.js'
-    ];
-
     let mergedConfig = [];
 
     for (const url of CONFIG_URLS) {
@@ -1089,24 +1089,25 @@ async function init() {
         const response = await fetch(url + '?t=' + Date.now());
 
         if (!response.ok) {
-          console.warn('Config not found:', url);
+          console.warn('Failed:', url);
           continue;
         }
 
         const jsText = await response.text();
 
-        let SONGS_CONFIG = [];
+        window.SONGS_CONFIG = [];
 
         eval(jsText);
 
-        if (Array.isArray(SONGS_CONFIG)) {
-          mergedConfig.push(...SONGS_CONFIG);
+        if (Array.isArray(window.SONGS_CONFIG)) {
+          mergedConfig.push(...window.SONGS_CONFIG);
         }
-
       } catch (err) {
-        console.warn('Failed loading config:', url, err);
+        console.error(err);
       }
     }
+
+    console.log('Songs Loaded:', mergedConfig);
 
     loadFromConfigData(mergedConfig);
 
@@ -1129,8 +1130,8 @@ async function init() {
 
     drawVisualizer();
 
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    console.error('Init Error:', error);
   }
 }
 
