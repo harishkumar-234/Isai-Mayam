@@ -1,6 +1,0 @@
-Place your .mp3 music files in this folder.
-
-Then update the src field in script.js for each track, e.g.:
-  src: "songs/your-song-name.mp3"
-
-Supported format: MP3 (.mp3)
