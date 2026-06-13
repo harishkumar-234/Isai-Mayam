@@ -1074,42 +1074,50 @@ function handleFolderImport(files) {
   showToast(`Successfully imported ${media.length} songs from folder!`);
 }
 
-const CONFIG_URLS = [
-  'https://harishkumar-234.github.io/Isai-Mayam-Songs/songs-config.js',
-  'https://harishkumar-234.github.io/Isai-Mayam-Songs-1/songs-config.js',
-  'https://harishkumar-234.github.io/Isai-Mayam-Songs-2/songs-config.js'
-];
-
 async function init() {
   try {
+
+    const CONFIG_URLS = [
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs/songs-config.js',
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs-1/songs-config.js',
+      'https://harishkumar-234.github.io/Isai-Mayam-Songs-2/songs-config.js'
+    ];
+
     let mergedConfig = [];
 
     for (const url of CONFIG_URLS) {
+
       try {
-        const response = await fetch(url + '?t=' + Date.now());
+
+        window.SONGS_CONFIG = [];
+
+        const response = await fetch(
+          url + '?t=' + Date.now()
+        );
 
         if (!response.ok) {
-          console.warn('Failed:', url);
+          console.warn('Cannot load:', url);
           continue;
         }
 
         const jsText = await response.text();
-
-        window.SONGS_CONFIG = [];
 
         eval(jsText);
 
         if (Array.isArray(window.SONGS_CONFIG)) {
           mergedConfig.push(...window.SONGS_CONFIG);
         }
+
       } catch (err) {
         console.error(err);
       }
     }
 
-    console.log('Songs Loaded:', mergedConfig);
+    console.log('Merged Config:', mergedConfig);
 
     loadFromConfigData(mergedConfig);
+
+    console.log('Media Count:', media.length);
 
     if (songCountEl) {
       songCountEl.textContent = media.length;
@@ -1117,8 +1125,11 @@ async function init() {
 
     if (movieCountEl) {
       const uniqueMovies = new Set(
-        media.filter(m => m.type === 'movie').map(m => m.artist)
+        media
+          .filter(m => m.type === 'movie')
+          .map(m => m.artist)
       );
+
       movieCountEl.textContent = uniqueMovies.size;
     }
 
@@ -1130,8 +1141,8 @@ async function init() {
 
     drawVisualizer();
 
-  } catch (error) {
-    console.error('Init Error:', error);
+  } catch (err) {
+    console.error('INIT ERROR:', err);
   }
 }
 
