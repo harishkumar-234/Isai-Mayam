@@ -52,7 +52,7 @@ const currentTimeEl = document.getElementById('currentTime');
 const totalTimeEl = document.getElementById('totalTime');
 const volumeSlider = document.getElementById('volumeSlider');
 const canvas = document.getElementById('visualizer');
-const ctx2d = canvas.getContext('2d');
+const ctx2d = canvas ? canvas.getContext('2d') : null;
 const mainSearch = document.getElementById('mainSearch');
 const searchClear = document.getElementById('searchClear');
 const searchDropdown = document.getElementById('searchDropdown');
@@ -392,16 +392,26 @@ window.toggleLike = function (songId) {
    HERO / NOW PLAYING PANEL
    ──────────────────────────────────────────────────────────────── */
 function updateHero(song) {
-  document.getElementById('heroTitle').textContent = song.title;
-  document.getElementById('heroArtist').textContent = song.artist;
-  document.getElementById('heroAlbum').textContent = song.album + (song.type === 'movie' ? ' (Movie)' : '');
-  document.getElementById('heroEmoji').textContent = song.emoji;
-  document.getElementById('heroArt').className = `album-art ${song.color}`;
-  document.getElementById('nowLabel').textContent = song.type === 'movie' ? '🎬 Now Playing' : '▶ Now Playing';
+  const heroTitle = document.getElementById('heroTitle');
+  const heroArtist = document.getElementById('heroArtist');
+  const heroAlbum = document.getElementById('heroAlbum');
+  const heroEmoji = document.getElementById('heroEmoji');
+  const heroArt = document.getElementById('heroArt');
+  const nowLabel = document.getElementById('nowLabel');
+  const heroTags = document.getElementById('heroTags');
 
-  const typeTag = `<span class="tag ${song.type === 'movie' ? 'movie-tag' : ''}">${song.type === 'movie' ? 'Movie' : 'Song'}</span>`;
-  document.getElementById('heroTags').innerHTML =
-    song.tags.map(t => `<span class="tag ${song.type === 'movie' ? 'movie-tag' : ''}">${t}</span>`).join('') + typeTag;
+  if (heroTitle) heroTitle.textContent = song.title;
+  if (heroArtist) heroArtist.textContent = song.artist;
+  if (heroAlbum) heroAlbum.textContent = song.album + (song.type === 'movie' ? ' (Movie)' : '');
+  if (heroEmoji) heroEmoji.textContent = song.emoji;
+  if (heroArt) heroArt.className = `album-art ${song.color}`;
+  if (nowLabel) nowLabel.textContent = song.type === 'movie' ? '🎬 Now Playing' : '▶ Now Playing';
+
+  if (heroTags) {
+    const typeTag = `<span class="tag ${song.type === 'movie' ? 'movie-tag' : ''}">${song.type === 'movie' ? 'Movie' : 'Song'}</span>`;
+    heroTags.innerHTML =
+      song.tags.map(t => `<span class="tag ${song.type === 'movie' ? 'movie-tag' : ''}">${t}</span>`).join('') + typeTag;
+  }
 
   document.getElementById('playerTitle').textContent = song.title;
   document.getElementById('playerArtist').textContent = song.artist;
@@ -722,6 +732,8 @@ function setupAudioContext() {
    VISUALIZER — canvas bar animation
    ──────────────────────────────────────────────────────────────── */
 function drawVisualizer() {
+  if (!canvas || !ctx2d) return;
+
   requestAnimationFrame(drawVisualizer);
 
   canvas.width = canvas.offsetWidth;
